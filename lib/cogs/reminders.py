@@ -61,19 +61,9 @@ class reminders(commands.Cog):
                     continue
 
                 else:
-                    remindertext = db.record("SELECT ReminderText FROM reminders WHERE ReminderID = ?", reminder_id)
+                    remindertext, reminderauthor, reminderchannel = db.record("SELECT ReminderText, ReminderAuthor, ReminderChannel FROM reminders WHERE ReminderID = ?", reminder_id)
 
-                    reminderauthor = db.record("SELECT ReminderAuthor FROM reminders WHERE ReminderID = ?", reminder_id)
-
-                    reminderchannel = db.record("SELECT ReminderChannel FROM reminders WHERE ReminderID = ?", reminder_id)
-
-                    remindertext = str(remindertext[0])
-
-                    reminderauthor = str(reminderauthor[0])
-
-                    channel = int(reminderchannel[0])
-
-                    channel = self.bot.get_channel(channel)
+                    channel = self.bot.get_channel(int(reminderchannel))
 
                     await channel.send(f"{reminderauthor}: recuerda **{remindertext}**!")
 

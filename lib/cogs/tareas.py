@@ -12,14 +12,24 @@ from discord.utils import get
 import random
 import pandas as pd
 
+class buttonHandler(discord.ui.View):
+    @discord.ui.button(label="Done!", style=discord.ButtonStyle.success, emoji="✅")
+    async def done_button(self, interaction: discord.Interaction, button=discord.ui.Button):
+        button.disabled = True
+        await interaction.response.send_message(content = f"Task done!")
+        #code where it sets the task as "done" based on the ID
+
 class tareas(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot: commands.Bot = bot
 
-    @commands.hybrid_command(name = "t",
-    description = "Agrega una tarea.")
-    async def tarea(self, ctx: commands.Context, time: str, *, text) -> None:
-        pass
+    @app_commands.command(name="t", description="Add a task")
+    async def tarea(self, interaction: discord.Interaction, text: str) -> None:
+        view = buttonHandler()
+        #sends the text input back, and adds button
+        await interaction.response.send_message(text, view=view)
+
+        #code where it saves the text to database with an ID, and status as "pending"
 
 
 async def setup(bot: commands.Bot) -> None:
